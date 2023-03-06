@@ -1,0 +1,48 @@
+---
+- name: Install XAMPP
+  hosts: all
+  become: yes
+  
+  tasks:
+    - name: Install Dependency
+      command: sudo dnf install net-tools -y
+
+    - name: Install Dependency
+      command: sudo dnf install libnsl -y
+      
+    - name: Download XAMPP
+      get_url:
+        url: https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.0/xampp-linux-x64-8.2.0-0-installer.run
+        dest: /home/ec2-user/xampp-linux-*-installer.run
+        mode: '0755'
+        
+    - name: Install XAMPP
+      command: /home/ec2-user/xampp-linux-*-installer.run --mode unattended
+
+    - name: Download Mediawiki
+      get_url:
+        url: https://releases.wikimedia.org/mediawiki/1.39/mediawiki-1.39.2.tar.gz
+        dest: /home/ec2-user/mediawiki.tar.gz
+        mode: '0755'
+
+    - name: Setup Mediawiki
+      unarchive:
+        src: /home/ec2-user/mediawiki.tar.gz
+        dest: /opt/lampp/htdocs/
+        remote_src: yes
+    
+    - name: Create a symbolic link to mediawiki
+      file:
+        src: /opt/lampp/htdocs/mediawiki-1.39.2/
+        dest: /opt/lampp/htdocs/mediawiki
+        state: link
+
+    - name: Start Apache
+      command: /opt/lampp/bin/apachectl start
+
+    - name: Start Php
+      command: /opt/lampp/bin/php -S localhost:8000
+
+
+  
+  

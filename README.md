@@ -1,7 +1,7 @@
 
 # My Test Deployment ( Assignemnt Number 2 )
 
-Steps to run the automation
+This is the assignment number 2. Steps to run the automation
 
 * Make sure Terraform and Ansible is installed in the system if not follow steps below.
 
